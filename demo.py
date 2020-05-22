@@ -37,7 +37,8 @@ if __name__ == "__main__":
     view_frust_pts = fusion.get_view_frustum(depth_im, cam_intr, cam_pose)
     vol_bnds[:,0] = np.minimum(vol_bnds[:,0], np.amin(view_frust_pts, axis=1))
     vol_bnds[:,1] = np.maximum(vol_bnds[:,1], np.amax(view_frust_pts, axis=1))
-    break
+    if i==1:
+        break
   print "Volume Bounds:",vol_bnds
   # ======================================================================================================== #
   	
