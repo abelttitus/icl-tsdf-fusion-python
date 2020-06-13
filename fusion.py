@@ -145,12 +145,16 @@ class TSDFVolume:
       gpu_dev = cuda.Device(0)
       self._max_gpu_threads_per_block = gpu_dev.MAX_THREADS_PER_BLOCK
       n_blocks = int(np.ceil(float(np.prod(self._vol_dim))/float(self._max_gpu_threads_per_block)))
+      print "Total number of Voxels:",float(np.prod(self._vol_dim))
+      print "Max threads per block:",self._max_gpu_threads_per_block
+      print "Number of blocks Required:",n_blocks
       grid_dim_x = min(gpu_dev.MAX_GRID_DIM_X,int(np.floor(np.cbrt(n_blocks))))
       grid_dim_y = min(gpu_dev.MAX_GRID_DIM_Y,int(np.floor(np.sqrt(n_blocks/grid_dim_x))))
       grid_dim_z = min(gpu_dev.MAX_GRID_DIM_Z,int(np.ceil(float(n_blocks)/float(grid_dim_x*grid_dim_y))))
       self._max_gpu_grid_dim = np.array([grid_dim_x,grid_dim_y,grid_dim_z]).astype(int)
       self._n_gpu_loops = int(np.ceil(float(np.prod(self._vol_dim))/float(np.prod(self._max_gpu_grid_dim)*self._max_gpu_threads_per_block)))
-
+      print "Grid dimension",self._max_gpu_grid_dim
+      print "No of GPU loops",self._n_gpu_loops
     else:
       # Get voxel grid coordinates
       xv, yv, zv = np.meshgrid(

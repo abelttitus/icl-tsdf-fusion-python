@@ -47,32 +47,32 @@ if __name__ == "__main__":
   tsdf_vol = fusion.TSDFVolume(vol_bnds, voxel_size=0.02)
 
   # Loop through RGB-D images and fuse them together
-  t0_elapse = time.time()
-  for i in range(n_imgs):
-    print("Fusing frame %d/%d"%(i+1, n_imgs))
+  # t0_elapse = time.time()
+  # for i in range(n_imgs):
+  #   print("Fusing frame %d/%d"%(i+1, n_imgs))
 
-    # Read RGB-D image and camera pose
-    color_image = cv2.cvtColor(cv2.imread("/home/ashfaquekp/rgb/%d.png"%(i+1)), cv2.COLOR_BGR2RGB)
-    depth_im = cv2.imread("/home/ashfaquekp/depth/%d.png"%(i+1),-1).astype(float)
-    depth_im /= 5000.
-    #depth_im[depth_im == 65.535] = 0
-    cam_pose=cam_poses[3*i:3*(i+1),:]
-    homo=np.array([[0.0,0.0,0.0,1.0]])
-    cam_pose=np.concatenate([cam_pose,homo])
+  #   # Read RGB-D image and camera pose
+  #   color_image = cv2.cvtColor(cv2.imread("/home/ashfaquekp/rgb/%d.png"%(i+1)), cv2.COLOR_BGR2RGB)
+  #   depth_im = cv2.imread("/home/ashfaquekp/depth/%d.png"%(i+1),-1).astype(float)
+  #   depth_im /= 5000.
+  #   #depth_im[depth_im == 65.535] = 0
+  #   cam_pose=cam_poses[3*i:3*(i+1),:]
+  #   homo=np.array([[0.0,0.0,0.0,1.0]])
+  #   cam_pose=np.concatenate([cam_pose,homo])
     
 
-    # Integrate observation into voxel volume (assume color aligned with depth)
-    tsdf_vol.integrate(color_image, depth_im, cam_intr, cam_pose, obs_weight=1.)
+  #   # Integrate observation into voxel volume (assume color aligned with depth)
+  #   tsdf_vol.integrate(color_image, depth_im, cam_intr, cam_pose, obs_weight=1.)
 
-  fps = n_imgs / (time.time() - t0_elapse)
-  print("Average FPS: {:.2f}".format(fps))
+  # fps = n_imgs / (time.time() - t0_elapse)
+  # print("Average FPS: {:.2f}".format(fps))
 
-  # Get mesh from voxel volume and save to disk (can be viewed with Meshlab)
-  print("Saving mesh to mesh.ply...")
-  verts, faces, norms, colors = tsdf_vol.get_mesh()
-  fusion.meshwrite("mesh.ply", verts, faces, norms, colors)
+  # # Get mesh from voxel volume and save to disk (can be viewed with Meshlab)
+  # print("Saving mesh to mesh.ply...")
+  # verts, faces, norms, colors = tsdf_vol.get_mesh()
+  # fusion.meshwrite("mesh.ply", verts, faces, norms, colors)
 
-  # Get point cloud from voxel volume and save to disk (can be viewed with Meshlab)
-  print("Saving point cloud to pc.ply...")
-  point_cloud = tsdf_vol.get_point_cloud()
-  fusion.pcwrite("pc.ply", point_cloud)
+  # # Get point cloud from voxel volume and save to disk (can be viewed with Meshlab)
+  # print("Saving point cloud to pc.ply...")
+  # point_cloud = tsdf_vol.get_point_cloud()
+  # fusion.pcwrite("pc.ply", point_cloud)
